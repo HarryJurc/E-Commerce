@@ -1,3 +1,41 @@
+class Product:
+    """Класс для продукции"""
+
+    product_count = 0
+
+    def __init__(self, name: str, description: str, price: float, quantity: int):
+        """Инициализация объекта продукта"""
+        self.name = name
+        self.description = description
+        self.price = price
+        self.quantity = quantity
+        Product.product_count += 1
+
+
+class Category:
+    """Класс для категорий"""
+
+    category_count = 0
+    product_count = 0
+
+    def __init__(self, name: str, description: str, products: list):
+        """Инициализация объекта категории"""
+        self.name = name
+        self.description = description
+        self.products = products if products else []
+        self.product_count = len(self.products)
+
+        Category.category_count += 1
+        Category.product_count += len(products)
+
+    def add_product(self, product):
+        """Добавляет товар в категорию и обновляет счетчики"""
+        self.products.append(product)
+        self.product_count += 1
+        Category.product_count += 1
+
+
+
 if __name__ == "__main__":
     product1 = Product("Samsung Galaxy S23 Ultra", "256GB, Серый цвет, 200MP камера", 180000.0, 5)
     product2 = Product("Iphone 15", "512GB, Gray space", 210000.0, 8)
