@@ -7,23 +7,23 @@ class Product:
         """Инициализация объекта продукта"""
         self.name = name
         self.description = description
-        self._price = price
+        self.__price = price
         self.quantity = quantity
         Product.product_count += 1
 
     def __str__(self):
-        return f"{self.name}, {self._price} руб. Остаток: {self.quantity} шт."
+        return f"{self.name}, {self.__price} руб. Остаток: {self.quantity} шт."
 
     @property
     def price(self):
-        return self._price
+        return self.__price
 
     @price.setter
     def price(self, value):
         if value < 0:
             print("Цена не может быть отрицательной.")
         else:
-            self._price = value
+            self.__price = value
 
     @classmethod
     def new_product(cls, data: dict):
