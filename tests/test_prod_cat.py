@@ -1,5 +1,6 @@
 import pytest
-from main import Product, Category
+from src.product import Product
+from src.category import Category
 
 
 @pytest.fixture
@@ -76,11 +77,8 @@ def test_product_creation_invalid_price(reset_counts, capsys):
     assert "Цена не может быть отрицательной." in captured.out
     assert p1.price == 100.0
 
+
 def test_products_property_formatting(reset_counts, sample_products):
     category = Category("Category1", "Description1", sample_products)
     products = category.products
-    assert products == [
-        "Product1, 100.0 руб. Остаток: 10 шт.\n",
-        "Product2, 200.0 руб. Остаток: 20 шт.\n"
-    ]
-
+    assert products == ["Product1, 100.0 руб. Остаток: 10 шт.\n", "Product2, 200.0 руб. Остаток: 20 шт.\n"]

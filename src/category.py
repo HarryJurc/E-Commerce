@@ -1,0 +1,32 @@
+from src.product import Product
+
+
+class Category:
+    """Класс для категорий"""
+
+    category_count = 0
+    product_count = 0
+
+    def __init__(self, name: str, description: str, products: list = None):
+        """Инициализация объекта категории"""
+        self.name = name
+        self.description = description
+        self.__products = products if products else []
+        self.product_count = len(self.__products)
+
+        Category.category_count += 1
+        Category.product_count += len(self.__products)
+
+    def add_product(self, product: Product):
+        """Добавляет товар в категорию и обновляет счетчики"""
+        if not isinstance(product, Product):
+            raise TypeError("Можно добавлять только объекты класса Product")
+
+        self.__products.append(product)
+        self.product_count += 1
+        Category.product_count += 1
+
+    @property
+    def products(self):
+        """Геттер для получения списка товаров в формате строки"""
+        return [f"{str(product)}\n" for product in self.__products]
