@@ -14,6 +14,11 @@ class Product:
     def __str__(self):
         return f"{self.name}, {self.__price} руб. Остаток: {self.quantity} шт."
 
+    def __add__(self, other):
+        if not isinstance(other, Product):
+            raise TypeError("Складывать можно только объекты класса Product")
+        return self.__price * self.quantity + other.__price * other.quantity
+
     @property
     def price(self):
         return self.__price

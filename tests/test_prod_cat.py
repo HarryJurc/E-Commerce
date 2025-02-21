@@ -55,14 +55,10 @@ def test_add_product_invalid_type(reset_counts, sample_products):
 
 def test_price_getter_and_setter(reset_counts):
     p1 = Product("Product1", "Description1", 100.0, 10)
-
-    # Проверка сеттера
     p1.price = 150.0
     assert p1.price == 150.0
-
-    # Проверка сеттера с отрицательным значением
     p1.price = -50.0
-    assert p1.price == 150.0  # Цена не должна измениться, так как она не может быть отрицательной
+    assert p1.price == 150.0
 
 
 def test_price_getter(reset_counts):
@@ -82,3 +78,36 @@ def test_products_property_formatting(reset_counts, sample_products):
     category = Category("Category1", "Description1", sample_products)
     products = category.products
     assert products == ["Product1, 100.0 руб. Остаток: 10 шт.\n", "Product2, 200.0 руб. Остаток: 20 шт.\n"]
+
+
+def test_product_addition(reset_counts, sample_products):
+    p1 = sample_products[0]
+    p2 = sample_products[1]
+    total_value = p1 + p2
+    assert total_value == (p1.price * p1.quantity + p2.price * p2.quantity)
+
+
+def test_price_setter_invalid_value(reset_counts):
+    p1 = Product("Product1", "Description1", 100.0, 10)
+    p1.price = -10.0
+    assert p1.price == 100.0
+
+
+def test_add_multiple_products(reset_counts):
+    category = Category("Category1", "Description1")
+    p1 = Product("Product1", "Description1", 100.0, 10)
+    p2 = Product("Product2", "Description2", 200.0, 20)
+    p3 = Product("Product3", "Description3", 300.0, 30)
+    category.add_product(p1)
+    category.add_product(p2)
+    category.add_product(p3)
+
+    assert len(category.products) == 3
+    assert category.product_count == 3
+    assert Category.product_count == 3
+
+
+def test_empty_category_products_property(reset_counts):
+    category = Category("Category1", "Description1")
+    products = category.products
+    assert products == []
