@@ -1,6 +1,5 @@
-
 import pytest
-from src.product import Product, InitLoggerMixin, BaseProduct
+from src.product import Product, BaseProduct
 from src.category import Category
 
 

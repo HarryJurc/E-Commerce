@@ -9,7 +9,6 @@ class InitLoggerMixin:
         print(f"Создан объект {class_name} с параметрами: {args}, {kwargs}")
         super().__init__(*args, **kwargs)
 
-
     def __repr__(self):
         return f"{self.__class__.__name__}({self.__dict__})"
 
@@ -26,21 +25,17 @@ class BaseProduct(ABC):
         self.quantity = quantity
         BaseProduct.product_count += 1
 
-
     @abstractmethod
     def __str__(self):
         pass
-
 
     @abstractmethod
     def __add__(self, other):
         pass
 
-
     @property
     def price(self):
         return self._price
-
 
     @price.setter
     def price(self, value):
@@ -48,7 +43,6 @@ class BaseProduct(ABC):
             print("Цена не может быть отрицательной.")
         else:
             self._price = value
-
 
     @classmethod
     def new_product(cls, data: dict):
@@ -61,10 +55,8 @@ class Product(InitLoggerMixin, BaseProduct):
     def __init__(self, name: str, description: str, price: float, quantity: int):
         super().__init__(name, description, price, quantity)
 
-
     def __str__(self):
         return f"{self.name}, {self._price} руб. Остаток: {self.quantity} шт."
-
 
     def __add__(self, other):
         if not isinstance(other, Product):
