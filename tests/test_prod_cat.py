@@ -148,3 +148,21 @@ def test_new_product():
     p1 = Product.new_product(data)
     assert isinstance(p1, Product)
     assert p1.name == "Product1"
+
+
+def test_product_creation_with_zero_quantity():
+    with pytest.raises(ValueError, match="Товар с нулевым количеством не может быть добавлен."):
+        Product("Бракованный товар", "Неверное количество", 1000.0, 0)
+
+
+def test_middle_price():
+    product1 = Product("Samsung Galaxy S23 Ultra", "256GB, Серый цвет, 200MP камера", 180000.0, 5)
+    product2 = Product("Iphone 15", "512GB, Gray space", 210000.0, 8)
+    product3 = Product("Xiaomi Redmi Note 11", "1024GB, Синий", 31000.0, 14)
+    category = Category("Смартфоны", "Категория смартфонов", [product1, product2, product3])
+    assert category.middle_price() == (180000.0 + 210000.0 + 31000.0) / 3
+
+
+def test_middle_price_empty_category():
+    category_empty = Category("Пустая категория", "Категория без продуктов", [])
+    assert category_empty.middle_price() == 0
