@@ -3,6 +3,7 @@ from src.category import Category
 from src.smartphone import Smartphone
 from src.lawngrass import LawnGrass
 
+
 def test_product_addition_same_type():
     phone1 = Smartphone("Phone1", "Smartphone Description", 50000, 5, "ModelX", 9.5, 128, "Black")
     phone2 = Smartphone("Phone2", "Smartphone Description", 60000, 3, "ModelY", 8.0, 256, "White")

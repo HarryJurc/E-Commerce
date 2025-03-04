@@ -1,5 +1,5 @@
 import pytest
-from src.product import Product
+from src.product import Product, BaseProduct
 from src.category import Category
 
 
@@ -9,6 +9,7 @@ def reset_counts():
     Product.product_count = 0
     Category.category_count = 0
     Category.product_count = 0
+    BaseProduct.product_count = 0
 
 
 @pytest.fixture
@@ -17,15 +18,6 @@ def sample_products():
     p1 = Product("Product1", "Description1", 100.0, 10)
     p2 = Product("Product2", "Description2", 200.0, 20)
     return [p1, p2]
-
-
-def test_product_creation(reset_counts):
-    p1 = Product("Product1", "Description1", 100.0, 10)
-    assert p1.name == "Product1"
-    assert p1.description == "Description1"
-    assert p1.price == 100.0
-    assert p1.quantity == 10
-    assert Product.product_count == 1
 
 
 def test_category_creation(reset_counts, sample_products):
@@ -80,13 +72,6 @@ def test_products_property_formatting(reset_counts, sample_products):
     assert products == ["Product1, 100.0 руб. Остаток: 10 шт.\n", "Product2, 200.0 руб. Остаток: 20 шт.\n"]
 
 
-def test_product_addition(reset_counts, sample_products):
-    p1 = sample_products[0]
-    p2 = sample_products[1]
-    total_value = p1 + p2
-    assert total_value == (p1.price * p1.quantity + p2.price * p2.quantity)
-
-
 def test_price_setter_invalid_value(reset_counts):
     p1 = Product("Product1", "Description1", 100.0, 10)
     p1.price = -10.0
@@ -111,3 +96,55 @@ def test_empty_category_products_property(reset_counts):
     category = Category("Category1", "Description1")
     products = category.products
     assert products == []
+
+
+def test_product_creation(reset_counts, capsys):
+    p1 = Product("Product1", "Description1", 100.0, 10)
+    captured = capsys.readouterr()
+    assert "Создан объект Product с параметрами" in captured.out
+    assert p1.name == "Product1"
+    assert p1.description == "Description1"
+    assert p1.price == 100.0
+    assert p1.quantity == 10
+    assert BaseProduct.product_count == 1
+
+
+def test_product_addition(reset_counts):
+    p1 = Product("Product1", "Description1", 100.0, 10)
+    p2 = Product("Product2", "Description2", 200.0, 5)
+    total_value = p1 + p2
+    assert total_value == (p1.price * p1.quantity + p2.price * p2.quantity)
+
+
+def test_product_addition_invalid_type(reset_counts):
+    p1 = Product("Product1", "Description1", 100.0, 10)
+    with pytest.raises(TypeError):
+        p1 + "InvalidType"
+
+
+def test_price_setter_positive(reset_counts):
+    p1 = Product("Product1", "Description1", 100.0, 10)
+    p1.price = 150.0
+    assert p1.price == 150.0
+
+
+def test_price_setter_negative(reset_counts, capsys):
+    p1 = Product("Product1", "Description1", 100.0, 10)
+    p1.price = -50.0
+    captured = capsys.readouterr()
+    assert "Цена не может быть отрицательной." in captured.out
+    assert p1.price == 100.0
+
+
+def test_repr():
+    p1 = Product("Product1", "Description1", 100.0, 10)
+    assert "Product" in repr(p1)
+    assert "name" in repr(p1)
+    assert "price" in repr(p1)
+
+
+def test_new_product():
+    data = {"name": "Product1", "description": "Description1", "price": 100.0, "quantity": 10}
+    p1 = Product.new_product(data)
+    assert isinstance(p1, Product)
+    assert p1.name == "Product1"
